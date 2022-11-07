@@ -1,5 +1,6 @@
 // Reset component
 function Reset() {
+  
     return (
     <div>
         <h3>Reset Password</h3>
@@ -9,6 +10,7 @@ function Reset() {
 
 // Login component
 function Login() {
+
     return (
     <div>
         <h3>Login</h3>
@@ -18,6 +20,7 @@ function Login() {
 
 // Register component
 function Register() {
+
     return (
     <div>
         <h3>Register</h3>
