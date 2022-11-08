@@ -1,3 +1,37 @@
+// Variables
+const { useState, useRef, useEffect } = React;
+
+const FNAME_REGEX = /^[a-zA-Z]+ [a-zA-Z]+$/;
+const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
+const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%_]).{8,24}$/;
+
+
+// App component
+function MyApp() {
+
+    const [currentForm, setCurrentForm] = useState('login');
+
+    const toggleForm = (formName) => {
+        setCurrentForm(formName);
+    }
+
+    return (
+        <main className="App">
+            {
+                currentForm === "login" ? <Login onFormSwitch={toggleForm} /> : 
+                currentForm === "register" ? <Register onFormSwitch={toggleForm} /> :
+                <Reset onFormSwitch={toggleForm} /> 
+            }
+        </main>
+    )
+}
+
+    const container = document.getElementById('root');
+    const root = ReactDOM.createRoot(container);
+    root.render(<MyApp />);
+
+
 // Reset component
 function Reset() {
 
@@ -146,6 +180,7 @@ function Login(props) {
     )
 }
 
+
 // Register component
 function Register(props) {
 
@@ -159,20 +194,20 @@ function Register(props) {
     const [fullnameFocus, setFullnameFocus] = useState(false);
 
     const [user, setUser] = useState('');
-    //const [validName, setValidName] = useState(false);
-    //const [userFocus, setUserFocus] = useState(false);
+    const [validName, setValidName] = useState(false);
+    const [userFocus, setUserFocus] = useState(false);
 
     const [email, setEmail] = useState('');
-    //const [validEmail, setValidEmail] = useState(false);
-    //const [emailFocus, setEmailFocus] = useState(false);
+    const [validEmail, setValidEmail] = useState(false);
+    const [emailFocus, setEmailFocus] = useState(false);
 
     const [pwd, setPwd] = useState('');
-    //const [validPwd, setValidPwd] = useState(false);
-    //const [pwdFocus, setPwdFocus] = useState(false);
+    const [validPwd, setValidPwd] = useState(false);
+    const [pwdFocus, setPwdFocus] = useState(false);
 
     const [matchPwd, setMatchPwd] = useState('');
-    //const [validMatch, setValidMatch] = useState(false);
-    //const [matchFocus, setMatchFocus] = useState(false);
+    const [validMatch, setValidMatch] = useState(false);
+    const [matchFocus, setMatchFocus] = useState(false);
 
     useEffect(() => {
         userRef.current.focus();
@@ -232,8 +267,6 @@ function Register(props) {
                 <form onSubmit={handleSubmit}>
                 <label htmlFor="fullname">
                         Full Name:
-                        <FontAwesomeIcon icon={faCheck} className={validFullname ? "valid" : "hide"} />
-                        <FontAwesomeIcon icon={faTimes} className={validFullname || !fullname ? "hide" : "invalid"} />
                     </label>
                     <input
                         type="text"
@@ -250,16 +283,14 @@ function Register(props) {
                     />
                     <p id="fullnamenote" className={fullnameFocus && fullname &&
                         !validFullname ? "instructions" : "offscreen"}>
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <i className="fa-solid fa-circle-info"></i>
                         8 to 24 characters.<br />
                         Must begin with a letter.<br />
                         Letters, numbers, underscores, hyphens allowed.
                     </p>
-    
+
                     <label htmlFor="username">
-                        Username:
-                        <FontAwesomeIcon icon={faCheck} className={validName ? "valid" : "hide"} />
-                        <FontAwesomeIcon icon={faTimes} className={validName || !user ? "hide" : "invalid"} />
+                        Username: 
                     </label>
                     <input
                         type="text"
@@ -276,7 +307,7 @@ function Register(props) {
                     />
                     <p id="uidnote" className={userFocus && user &&
                         !validName ? "instructions" : "offscreen"}>
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <i className="fa-solid fa-circle-info"></i>
                         4 to 24 characters.<br />
                         Must begin with a letter.<br />
                         Letters, numbers, underscores, hyphens allowed.
@@ -284,8 +315,6 @@ function Register(props) {
     
                     <label htmlFor="email">
                         Email:
-                        <FontAwesomeIcon icon={faCheck} className={validEmail ? "valid" : "hide"} />
-                        <FontAwesomeIcon icon={faTimes} className={validEmail || !email ? "hide" : "invalid"} />
                     </label>
                     <input
                         type="email"
@@ -302,7 +331,7 @@ function Register(props) {
                     />
                     <p id="emailnote" className={emailFocus && email &&
                         !validEmail ? "instructions" : "offscreen"}>
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <i className="fa-solid fa-circle-info"></i>
                         13 to 24 characters.<br />
                         Must begin with a letter.<br />
                         Letters, numbers, underscores, hyphens allowed.
@@ -310,8 +339,6 @@ function Register(props) {
     
                     <label htmlFor="password">
                         Password:
-                        <FontAwesomeIcon icon={faCheck} className={validPwd ? "valid" : "hide"} />
-                        <FontAwesomeIcon icon={faTimes} className={validPwd || !pwd ? "hide" : "invalid"} />
                     </label>
                     <input
                         type="password"
@@ -326,7 +353,7 @@ function Register(props) {
                         onBlur={() => setPwdFocus(false)}
                     />
                     <p id="pwdnote" className={pwdFocus && !validPwd ? "instructions" : "offscreen"}>
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <i className="fa-solid fa-circle-info"></i>
                         8 to 24 characters.<br />
                         Must include uppercase and lowercase letters, a number and a special character.<br />
                         Allowed special characters: 
@@ -334,13 +361,12 @@ function Register(props) {
                         <span aria-label="at symbol">@</span> 
                         <span aria-label="hashtag">#</span> 
                         <span aria-label="dollar sign">$</span> 
+                        <span aria-label="dollar sign">_</span>
                         <span aria-label="percent">%</span>
                     </p>
     
                     <label htmlFor="confirm_pwd">
                         Confirm Password:
-                        <FontAwesomeIcon icon={faCheck} className={validMatch && matchPwd ? "valid" : "hide"} />
-                        <FontAwesomeIcon icon={faTimes} className={validMatch || !matchPwd ? "hide" : "invalid"} />
                     </label>
                     <input
                         type="password"
@@ -355,9 +381,10 @@ function Register(props) {
                         onBlur={() => setMatchFocus(false)}
                     />
                     <p id="confirmnote" className={matchFocus && !validMatch ? "instructions" : "offscreen"}>
-                        <FontAwesomeIcon icon={faInfoCircle} />
+                        <i className="fa-solid fa-circle-info"></i>
                         Must match the first password input field.
                     </p>
+
                     <button 
                         disabled={!validFullname || !validName || !validEmail || !validPwd || !validMatch ? true : false}
                     >
@@ -375,36 +402,7 @@ function Register(props) {
         </div>
     )
 }
-// App component
-function MyApp() {
 
-    const [currentForm, setCurrentForm] = useState('login');
 
-    const toggleForm = (formName) => {
-        setCurrentForm(formName);
-    }
 
-    return (
-        <main className="App">
-            {
-                currentForm === "login" ? <Login onFormSwitch={toggleForm} /> : 
-                currentForm === "register" ? <Register onFormSwitch={toggleForm} /> :
-                <Reset onFormSwitch={toggleForm} /> 
-            }
-        </main>
-    )
-}
 
-  const container = document.getElementById('root');
-  const root = ReactDOM.createRoot(container);
-  root.render(<MyApp />);
-
-// Variables
-const { useState, useRef, useEffect } = React;
-const { FontAwesomeIcon } = "@fortawesome/react-fontawesome";
-const { faCheck, faTimes, faInfoCircle } = "@fortawesome/free-solid-svg-icons";
-
-const FNAME_REGEX = /^[a-zA-Z]+ [a-zA-Z]+$/;
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
